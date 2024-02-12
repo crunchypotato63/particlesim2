@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +11,7 @@ public class ParticleSimulator extends JPanel {
     public static final int CANVAS_HEIGHT = 720;
 
     //Particle size
-    private static final double PARTICLE_RADIUS = 1;
+    private static final double PARTICLE_RADIUS = 10;
 
     //Particle and Wall colors
     private static final Color PARTICLE_COLOR = Color.BLUE;
@@ -26,12 +25,13 @@ public class ParticleSimulator extends JPanel {
     private List<Wall> walls = new ArrayList<>();
 
     //Variables needed to calculate FPS
-    private double fps;
+    private int fps;
+    private int frameCount;
     private long lastTime;
 
     //Java Swing variables
     private JLabel fpsLabel;
-
+    
     public ParticleSimulator() {
         //sets canvas size
         setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
@@ -43,7 +43,9 @@ public class ParticleSimulator extends JPanel {
         //for fps counter
         lastTime = System.nanoTime();
 
-        //Update loop
+        frameCount = 0;
+
+        // Update loop
         new Timer(1000 / 60, e -> {
             long now = System.nanoTime();
             double deltaTime = (now - lastTime) / 1_000_000_000.0; // in seconds
@@ -51,6 +53,7 @@ public class ParticleSimulator extends JPanel {
 
             update(deltaTime);
             repaint();
+            frameCount++;
         }).start();
 
         //fps counter
@@ -75,11 +78,14 @@ public class ParticleSimulator extends JPanel {
     }
 
     private void addParticle() {
+        //TODO: Make user input any number of particles, 
         particles.add(new Particle(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, Math.random() * 360, Math.random() * 100 + 50));
     }
 
     private void addWall() {
+        /* 
         //only random horizontal or vertical wall
+        //TODO: Make user input x1, x2, y1, y2 to add a wall
         double x1, y1, x2, y2;
         if (Math.random() < 0.5) {
             // Horizontal wall
@@ -92,7 +98,25 @@ public class ParticleSimulator extends JPanel {
             y2 = CANVAS_HEIGHT - 100;
             x1 = x2 = Math.random() * CANVAS_WIDTH;
         }
-        walls.add(new Wall(x1, y1, x2, y2));
+        walls.add(new Wall(x1, y1, x2, y2)); */
+
+        String stringX1 = JOptionPane.showInputDialog("Enter x1 coordinate:");
+        String stringY1 = JOptionPane.showInputDialog("Enter y1 coordinate:");
+        String stringX2 = JOptionPane.showInputDialog("Enter x2 coordinate:");
+        String stringY2 = JOptionPane.showInputDialog("Enter y2 coordinate:");
+
+        try {
+            // Parse the input values
+            double x1 = Double.parseDouble(stringX1);
+            double y1 = Double.parseDouble(stringY1);
+            double x2 = Double.parseDouble(stringX2);
+            double y2 = Double.parseDouble(stringY2);
+    
+            // Add the wall with the specified coordinates
+            walls.add(new Wall(x1, y1, x2, y2));
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid input! Please enter numeric values.");
+        }
     }
 
     @Override
@@ -124,12 +148,11 @@ public class ParticleSimulator extends JPanel {
     }
 
     private void updateFPS() {
-        fps = 1 / ((System.nanoTime() - lastTime) / 1_000_000_000.0); // Calculate FPS
-        lastTime = System.nanoTime();
+        fps = (int) (frameCount / FPS_UPDATE_INTERVAL);
+        frameCount = 0;
 
         // Update FPS label
-        DecimalFormat df = new DecimalFormat("0.00");
-        fpsLabel.setText("FPS: " + df.format(fps));
+        fpsLabel.setText("FPS: " + fps);
     }
 
     //drawing on canvas

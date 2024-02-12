@@ -25,19 +25,21 @@ public class Particle {
         //Move the particle
         double deltaX = velocity * Math.cos(Math.toRadians(angle)) * deltaTime;
         double deltaY = velocity * Math.sin(Math.toRadians(angle)) * deltaTime;
+       
+
+        //Bounce the other way when wall is hit
+        if (x < 0 || x > ParticleSimulator.CANVAS_WIDTH) {
+            angle = 180-angle;
+            deltaX = velocity * Math.cos(Math.toRadians(angle)) * deltaTime;
+
+        }
+        if (y < 0 || y > ParticleSimulator.CANVAS_HEIGHT) {
+            angle = -angle;
+            deltaY = velocity * Math.sin(Math.toRadians(angle)) * deltaTime;
+
+        } 
+        
         x += deltaX;
         y += deltaY;
-
-        //Wrap around the canvas (if particle goes beyond the canvas boundary)
-        if (x < 0) {
-            x += ParticleSimulator.CANVAS_WIDTH;
-        } else if (x > ParticleSimulator.CANVAS_WIDTH) {
-            x -= ParticleSimulator.CANVAS_WIDTH;
-        }
-        if (y < 0) {
-            y += ParticleSimulator.CANVAS_HEIGHT;
-        } else if (y > ParticleSimulator.CANVAS_HEIGHT) {
-            y -= ParticleSimulator.CANVAS_HEIGHT;
-        }
     }
 }
