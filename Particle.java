@@ -41,7 +41,7 @@ public class Particle {
                 deltaY = velocity * Math.sin(Math.toRadians(angle)) * deltaTime;
             }
 
-            if(y1 == y2 && Math.abs(y1-y) <= 5 && (x1 <= x && x <= x2) || (x1 >= x && x >= x2)){
+            else if(y1 == y2 && Math.abs(y1-y) <= 5 && (x1 <= x && x <= x2) || (x1 >= x && x >= x2)){
                 angle = 360-angle;
                 deltaX = velocity * Math.cos(Math.toRadians(angle)) * deltaTime;
                 deltaY = velocity * Math.sin(Math.toRadians(angle)) * deltaTime;
@@ -49,7 +49,14 @@ public class Particle {
             }
             
 
-            if(x1 != x2 && y1 != y2 && hasCollision(wall)){
+            else if(x1 != x2 && y1 != y2 && hasCollision(wall)){
+                double slope = (y2 - y1) / (x2 - x1);
+                double theta = Math.atan(slope);
+
+                double incidence = angle - theta;
+                angle = 180+incidence;
+                deltaX = velocity * Math.cos(Math.toRadians(angle)) * deltaTime;
+                deltaY = velocity * Math.sin(Math.toRadians(angle)) * deltaTime;
 
             }
         }
