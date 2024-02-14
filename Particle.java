@@ -29,9 +29,27 @@ public class Particle {
        
 
         for(Wall wall: walls){
-            if(hasCollision(wall)){
-                x=0;
-                y=0;
+
+            double x1 = wall.getX1();
+            double x2 = wall.getX2();
+            double y1 = wall.getY1();
+            double y2 = wall.getY2();
+
+            if(x1 == x2 && Math.abs(x1-x) <= 5 && (y1 <= y && y <= y2) || (y1 >= y && y >= y2)){
+                angle = 180-angle;
+                deltaX = velocity * Math.cos(Math.toRadians(angle)) * deltaTime;
+                deltaY = velocity * Math.sin(Math.toRadians(angle)) * deltaTime;
+            }
+
+            if(y1 == y2 && Math.abs(y1-y) <= 5 && (x1 <= x && x <= x2) || (x1 >= x && x >= x2)){
+                angle = 360-angle;
+                deltaX = velocity * Math.cos(Math.toRadians(angle)) * deltaTime;
+                deltaY = velocity * Math.sin(Math.toRadians(angle)) * deltaTime;
+
+            }
+            
+
+            if(x1 != x2 && y1 != y2 && hasCollision(wall)){
 
             }
         }
@@ -40,10 +58,12 @@ public class Particle {
         if (x < 0 || x > ParticleSimulator.CANVAS_WIDTH) {
             angle = 180-angle;
             deltaX = velocity * Math.cos(Math.toRadians(angle)) * deltaTime;
+            deltaY = velocity * Math.sin(Math.toRadians(angle)) * deltaTime;
 
         }
         if (y < 0 || y > ParticleSimulator.CANVAS_HEIGHT) {
             angle = -angle;
+            deltaX = velocity * Math.cos(Math.toRadians(angle)) * deltaTime;
             deltaY = velocity * Math.sin(Math.toRadians(angle)) * deltaTime;
 
         } 
@@ -57,6 +77,8 @@ public class Particle {
             double x2 = wall.getX2();
             double y1 = wall.getY1();
             double y2 = wall.getY2();
+
+            
         
             if (x1 > x2) {
                 double temp = x1;
@@ -67,20 +89,23 @@ public class Particle {
                 y2 = temp;
             }
         
+            if(x1 <= x && x <= x2){
+                double m = (y2 - y1) / (x2 - x1);
+                double b = y1 - m * x1;
             
-            double m = (y2 - y1) / (x2 - x1);
-            double b = y1 - m * x1;
-        
 
-            double yOnLine = m * x + b;
-            if (Double.compare(y, yOnLine) != 1) {
-                return false;
-            }
-        
-
-            return x >= x1 && x <= x2;
+                double yOnLine = m * x + b;
+                double tolerance = 10; 
 
 
+                if (Math.abs(y - yOnLine) <= tolerance) {
+                    return true;
+                }
+        }
+            return false;
+
+        //account for line standing up
+        //account for line laying down (use window logic)
         }
         
 
