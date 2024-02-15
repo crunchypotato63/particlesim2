@@ -4,8 +4,8 @@ import java.util.List;
 public class Particle {
     private double x;
     private double y;
-    private double angle; // in degrees, 0 degrees is east
-    private double velocity; // in pixels per second
+    private double angle; //in degrees, 0 degrees is east
+    private double velocity; //in pixels per second
 
     public Particle(double x, double y, double angle, double velocity) {
         this.x = x;
@@ -112,7 +112,4 @@ public class Particle {
             return false;
 
         }
-        
-
-    
 }

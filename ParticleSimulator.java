@@ -59,12 +59,12 @@ public class ParticleSimulator extends JPanel {
             frameCount++;
         }).start();
 
-        //fps counter
+        //FPS counter
         new Timer((int) (FPS_UPDATE_INTERVAL * 1000), e -> {
-            updateFPS();
+            updateFPSText();
         }).start();
         
-        //fps label
+        //FPS label
         fpsLabel = new JLabel("FPS: ");
         fpsLabel.setForeground(Color.BLACK);
         fpsLabel.setHorizontalAlignment(JLabel.LEFT);
@@ -119,12 +119,12 @@ public class ParticleSimulator extends JPanel {
                 break;
         }
     }
+
     /*
      * ADD PARTICLES BETWEEN POINTS
      * 
-     * 
+     * This function does the first form of the three when adding particles, adding them between points.
      */
-    
     private void addParticlesBetweenPoints(int n) {
         //Separate window to input necessary values
         JPanel panel = new JPanel(new GridLayout(5, 2));
@@ -161,29 +161,33 @@ public class ParticleSimulator extends JPanel {
                 double incX = (endX - startX) / n;
                 double incY = (endY - startY) / n;
     
-                //Add particles with uniform distance between start and end points
+                //Adding of particles with uniform distance between start and end points
                 for (int i = 0; i < n; i++) {
                     Particle p = new Particle(startX + incX * i, startY + incY * i, 0, velocity);
                     particles.add(p);
                     t.get(threadToAdd).addParticle(p);
-                    threadToAdd = (threadToAdd + 1)%16;
+                    threadToAdd = (threadToAdd + 1) % 16;
                 }
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "Invalid input! Only Numeric Values!");
             }
         }
     }
-    
+
+    /*
+     * ADD PARTICLES BETWEEN ANGLES
+     * 
+     * This function does the second form of the three when adding particles, adding them between angles.
+     */
     private void addParticlesBetweenAngles(int n) {
         //Separate window to input necessary values
         JPanel panel = new JPanel(new GridLayout(4, 2));
     
-        //Create input fields for start and end angles, and velocity
+        //Input values for start and end angles and velocity
         JTextField startAngleField = new JTextField(5);
         JTextField endAngleField = new JTextField(5);
         JTextField velocityField = new JTextField(5);
     
-        //Add input fields to the panel with labels
         panel.add(new JLabel("Start Angle:"));
         panel.add(startAngleField);
         panel.add(new JLabel("End Angle:"));
@@ -191,72 +195,73 @@ public class ParticleSimulator extends JPanel {
         panel.add(new JLabel("Velocity:"));
         panel.add(velocityField);
     
-        //Show the panel in a dialog box
         int result = JOptionPane.showConfirmDialog(this, panel, "Enter Particle Parameters", JOptionPane.OK_CANCEL_OPTION);
     
         if (result == JOptionPane.OK_OPTION) {
             try {
-                //Parse input values
                 double startAngle = Double.parseDouble(startAngleField.getText());
                 double endAngle = Double.parseDouble(endAngleField.getText());
                 double velocity = Double.parseDouble(velocityField.getText());
     
-                //Calculate angle increment
+                //Calculating angle increment
                 double angleIncrement = (endAngle - startAngle) / n;
     
-                //Add particles with uniform distance between start and end angles
+                //Adding of particles with uniform distance between start and end angles
                 for (int i = 0; i < n; i++) {
-                    Particle p = new Particle(0, 0, startAngle + angleIncrement * i, velocity); // Position is not relevant
+                    Particle p = new Particle(0, 0, startAngle + angleIncrement * i, velocity);
                     particles.add(p);
                     t.get(threadToAdd).addParticle(p);
-                    threadToAdd = (threadToAdd + 1)%16;
+                    threadToAdd = (threadToAdd + 1) % 16;
                 }
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Invalid input! Please enter numeric values.");
+                JOptionPane.showMessageDialog(this, "Invalid input! Only Numeric Values!");
             }
         }
     }
+
+    /*
+     * ADD PARTICLES BETWEEN VELOCITY
+     * 
+     * This function does the third form of the three when adding particles, adding them between velocities
+     */
     
     private void addParticlesBetweenVelocities(int n) {
-        //Create a panel to hold input fields
+        //Separate window to input necessary values
         JPanel panel = new JPanel(new GridLayout(5, 2));
 
-        //Create input fields for start and end velocities, and angle
-        JTextField startVelocityField = new JTextField(5);
-        JTextField endVelocityField = new JTextField(5);
-        JTextField angleField = new JTextField(5);
+        //Input values for start and end velocities and angle
+        JTextField startVelocityText = new JTextField(5);
+        JTextField endVelocityText = new JTextField(5);
+        JTextField angleText = new JTextField(5);
 
-        //Add input fields to the panel with labels
         panel.add(new JLabel("Start Velocity:"));
-        panel.add(startVelocityField);
+        panel.add(startVelocityText);
         panel.add(new JLabel("End Velocity:"));
-        panel.add(endVelocityField);
+        panel.add(endVelocityText);
         panel.add(new JLabel("Angle:"));
-        panel.add(angleField);
+        panel.add(angleText);
 
-        //Show the panel in a dialog box
         int result = JOptionPane.showConfirmDialog(this, panel, "Enter Particle Parameters", JOptionPane.OK_CANCEL_OPTION);
 
         if (result == JOptionPane.OK_OPTION) {
             try {
-                //Parse input values
-                double startVelocity = Double.parseDouble(startVelocityField.getText());
-                double endVelocity = Double.parseDouble(endVelocityField.getText());
-                double angle = Double.parseDouble(angleField.getText());
+                double startVelocity = Double.parseDouble(startVelocityText.getText());
+                double endVelocity = Double.parseDouble(endVelocityText.getText());
+                double angle = Double.parseDouble(angleText.getText());
 
-                //Calculate velocity difference
+                //Calculating the velocity difference
                 double velocityDifference = (endVelocity - startVelocity) / n;
 
-                //Add particles with uniform difference between start and end velocities
+                //Adding of particles with uniform difference between start and end velocities
                 for (int i = 0; i < n; i++) {
-                    Particle p = new Particle(0, 0, angle, startVelocity + velocityDifference * i); //Position is not relevant
+                    Particle p = new Particle(0, 0, angle, startVelocity + velocityDifference * i);
                     particles.add(p);
                     t.get(threadToAdd).addParticle(p);
-                    threadToAdd = (threadToAdd + 1)%16;
+                    threadToAdd = (threadToAdd + 1) % 16;
                     
                 }
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Invalid input! Please enter numeric values.");
+                JOptionPane.showMessageDialog(this, "Invalid input! Only Numeric Values!");
             }
         }
     }
@@ -271,7 +276,6 @@ public class ParticleSimulator extends JPanel {
         //Panel for adding a wall
         JPanel panel = new JPanel(new GridLayout(4, 2));
 
-        //Input fields for x1, y1, x2, and y2 coordinates
         JTextField x1Field = new JTextField(1);
         JTextField y1Field = new JTextField(1);
         JTextField x2Field = new JTextField(1);
@@ -287,18 +291,16 @@ public class ParticleSimulator extends JPanel {
         panel.add(new JLabel("Y2:"));
         panel.add(y2Field);
 
-        //Show the panel in a dialog box
         int result = JOptionPane.showConfirmDialog(this, panel, "Enter Wall Coordinates", JOptionPane.OK_CANCEL_OPTION);
 
         if (result == JOptionPane.OK_OPTION) {
             try {
-                //Parse input values
                 double x1 = Double.parseDouble(x1Field.getText());
                 double y1 = Double.parseDouble(y1Field.getText());
                 double x2 = Double.parseDouble(x2Field.getText());
                 double y2 = Double.parseDouble(y2Field.getText());
 
-                //Add the wall with the specified coordinates
+                //Adding the walls with the specified coordinates
                 Wall w = new Wall(x1, y1, x2, y2);
                 walls.add(new Wall(x1, y1, x2, y2));
                 t.forEach((thread) -> thread.addWall(w));
@@ -308,6 +310,12 @@ public class ParticleSimulator extends JPanel {
             }
         }
     }
+
+    /*
+     * PAINT COMPONENT
+     * 
+     * This function is responble for the rendering process of the GUI.
+     */
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -323,21 +331,24 @@ public class ParticleSimulator extends JPanel {
         }
     }
 
-    //delegated to a thread
-    //calculating part
-    // private void update(double deltaTime) {
-    //     for (Particle particle : particles) {
-    //         particle.update(deltaTime, walls);
-    //     }
-    // }
+    /*
+     * UPDATE FPS TEXT
+     * 
+     * This functions is dealing with updating the fps text when its continuously updating
+     */
 
-    private void updateFPS() {
+    private void updateFPSText() {
         fps = (int) (frameCount / FPS_UPDATE_INTERVAL);
         frameCount = 0;
 
-        //Update FPS label
         fpsLabel.setText("FPS: " + fps);
     }
+
+    /*
+     * DRAW PARTICLE AND DRAW WALL
+     * 
+     * These two functions are responsible for drawing the particles and the walls on the program.
+     */
 
     private void drawParticle(Graphics2D g, Particle particle) {
         g.setColor(PARTICLE_COLOR);
@@ -349,21 +360,19 @@ public class ParticleSimulator extends JPanel {
 
     private void drawWall(Graphics2D g, Wall wall) {
         g.setColor(WALL_COLOR);
-        g.drawLine((int) Math.round(wall.getX1()), (int) Math.round(wall.getY1()),
-                (int) Math.round(wall.getX2()), (int) Math.round(wall.getY2()));
+        g.drawLine((int) Math.round(wall.getX1()), (int) Math.round(wall.getY1()), (int) Math.round(wall.getX2()), (int) Math.round(wall.getY2()));
     }
 
     public static void main(String[] args) {
-        
         List<CalculateThread> t = new ArrayList<>();
 
+        //16 Threads seem to be the most optimal
         for(int i = 0; i< 16; i++){
             t.add(new CalculateThread());
         }
 
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Particle Simulator");
-            //create threads before particle simulator is made
             frame.getContentPane().add(new ParticleSimulator(t), BorderLayout.CENTER);
             frame.pack();
             frame.setLocationRelativeTo(null);
@@ -372,8 +381,3 @@ public class ParticleSimulator extends JPanel {
         });
     }
 }
-
-//new thread class
-//thread class have list of particles to calculate for
-//whenever new particle added in, particle is added to thread list
-//flag to indicate which thread set to add the particle to
