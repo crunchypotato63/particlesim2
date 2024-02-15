@@ -35,12 +35,14 @@ public class Particle {
             double y1 = wall.getY1();
             double y2 = wall.getY2();
 
+            //wall is completely vertical
             if(x1 == x2 && Math.abs(x1-x) <= 5 && (y1 <= y && y <= y2) || (y1 >= y && y >= y2)){
                 angle = 180-angle;
                 deltaX = velocity * Math.cos(Math.toRadians(angle)) * deltaTime;
                 deltaY = velocity * Math.sin(Math.toRadians(angle)) * deltaTime;
             }
 
+            //wall is completely horizontal
             else if(y1 == y2 && Math.abs(y1-y) <= 5 && (x1 <= x && x <= x2) || (x1 >= x && x >= x2)){
                 angle = 360-angle;
                 deltaX = velocity * Math.cos(Math.toRadians(angle)) * deltaTime;
@@ -48,7 +50,7 @@ public class Particle {
 
             }
             
-
+            //wall is at an angle
             else if(x1 != x2 && y1 != y2 && hasCollision(wall)){
                 double slope = (y2 - y1) / (x2 - x1);
                 double theta = Math.atan(slope);
@@ -61,7 +63,7 @@ public class Particle {
             }
         }
 
-        //Bounce the other way when wall is hit
+        //Bounce the other way when boundary is hit
         if (x < 0 || x > ParticleSimulator.SCREEN_WIDTH) {
             angle = 180-angle;
             deltaX = velocity * Math.cos(Math.toRadians(angle)) * deltaTime;
@@ -86,7 +88,7 @@ public class Particle {
             double y2 = wall.getY2();
 
             
-        
+            //makes sure x1 is smaller than x2
             if (x1 > x2) {
                 double temp = x1;
                 x1 = x2;
@@ -97,15 +99,15 @@ public class Particle {
             }
         
             if(x1 <= x && x <= x2){
-                double m = (y2 - y1) / (x2 - x1);
-                double b = y1 - m * x1;
+                double m = (y2 - y1) / (x2 - x1); //slope
+                double b = y1 - m * x1; //y intercept
             
 
                 double yOnLine = m * x + b;
                 double tolerance = 10; 
 
 
-                if (Math.abs(y - yOnLine) <= tolerance) {
+                if(Math.abs(y - yOnLine) <= tolerance) {
                     return true;
                 }
         }

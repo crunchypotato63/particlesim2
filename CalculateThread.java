@@ -11,28 +11,28 @@ public class CalculateThread extends Thread{
         walls = new ArrayList<Wall>();
     }
 
-    /**
-     * TODO:
-     * - make function to add particle dynamically
-     * - make sure thread only recieves particle if it is next in line to recieve particle
-     */
-
-        //is called on a timer from main
-
+    
+    //for every particle assigned to this thread, particle updates position.
     public void update(double deltaTime) {
         for (Particle particle : particles) {
             particle.update(deltaTime, walls);
         }
     }
 
+
+    //returns list of particles assigned to the thread
     public List<Particle> getParticles(){
         return particles;
     }
 
+
+    //adds a wall to the list of walls
     public void addWall(Wall w){
         walls.add(w);
     }
 
+
+    //adds a particle to the list of particles
     public void addParticle(Particle p){
         particles.add(p);
     }
