@@ -62,13 +62,13 @@ public class Particle {
         }
 
         //Bounce the other way when wall is hit
-        if (x < 0 || x > ParticleSimulator.CANVAS_WIDTH) {
+        if (x < 0 || x > ParticleSimulator.SCREEN_WIDTH) {
             angle = 180-angle;
             deltaX = velocity * Math.cos(Math.toRadians(angle)) * deltaTime;
             deltaY = velocity * Math.sin(Math.toRadians(angle)) * deltaTime;
 
         }
-        if (y < 0 || y > ParticleSimulator.CANVAS_HEIGHT) {
+        if (y < 0 || y > ParticleSimulator.SCREEN_HEIGHT) {
             angle = -angle;
             deltaX = velocity * Math.cos(Math.toRadians(angle)) * deltaTime;
             deltaY = velocity * Math.sin(Math.toRadians(angle)) * deltaTime;
@@ -111,8 +111,6 @@ public class Particle {
         }
             return false;
 
-        //account for line standing up
-        //account for line laying down (use window logic)
         }
         
 
