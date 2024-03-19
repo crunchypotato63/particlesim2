@@ -14,14 +14,14 @@ public class ParticleSimulator extends JPanel {
 
     //Particle and Wall colors
     private static final Color PARTICLE_COLOR = Color.RED;
-    private static final Color WALL_COLOR = Color.BLACK;
+    // private static final Color WALL_COLOR = Color.BLACK;
 
     //Updates FPS every 0.5 seconds
     private static final double FPS_UPDATE_INTERVAL = 0.5;
 
     //Initialization of Particles and Walls
     private List<Particle> particles = new ArrayList<>();
-    private List<Wall> walls = new ArrayList<>();
+    // private List<Wall> walls = new ArrayList<>();
 
     //Variables needed to calculate FPS
     private int fps;
@@ -77,9 +77,10 @@ public class ParticleSimulator extends JPanel {
         this.add(addParticleButton, BorderLayout.SOUTH);
 
         //Add Wall button
-        JButton addWallButton = new JButton("Add Wall");
-        addWallButton.addActionListener(e -> addWall());
-        this.add(addWallButton, BorderLayout.SOUTH);
+        //wall begone for this version
+        // JButton addWallButton = new JButton("Add Wall");
+        // addWallButton.addActionListener(e -> addWall());
+        // this.add(addWallButton, BorderLayout.SOUTH);
     }
 
     /* 
@@ -266,50 +267,51 @@ public class ParticleSimulator extends JPanel {
         }
     }
 
+    //wall begone for this version
     /*
      * ADD WALL
      * 
      * This function is responsible for adding a wall to the program. It would open a new window where the user can input the coordinates for
      * the wall (start point and end point).
      */
-    private void addWall() {
-        //Panel for adding a wall
-        JPanel panel = new JPanel(new GridLayout(4, 2));
+    // private void addWall() {
+    //     //Panel for adding a wall
+    //     JPanel panel = new JPanel(new GridLayout(4, 2));
 
-        JTextField x1Field = new JTextField(1);
-        JTextField y1Field = new JTextField(1);
-        JTextField x2Field = new JTextField(1);
-        JTextField y2Field = new JTextField(1);
+    //     JTextField x1Field = new JTextField(1);
+    //     JTextField y1Field = new JTextField(1);
+    //     JTextField x2Field = new JTextField(1);
+    //     JTextField y2Field = new JTextField(1);
 
-        //Add input fields to the panel with labels
-        panel.add(new JLabel("X1:"));
-        panel.add(x1Field);
-        panel.add(new JLabel("Y1:"));
-        panel.add(y1Field);
-        panel.add(new JLabel("X2:"));
-        panel.add(x2Field);
-        panel.add(new JLabel("Y2:"));
-        panel.add(y2Field);
+    //     //Add input fields to the panel with labels
+    //     panel.add(new JLabel("X1:"));
+    //     panel.add(x1Field);
+    //     panel.add(new JLabel("Y1:"));
+    //     panel.add(y1Field);
+    //     panel.add(new JLabel("X2:"));
+    //     panel.add(x2Field);
+    //     panel.add(new JLabel("Y2:"));
+    //     panel.add(y2Field);
 
-        int result = JOptionPane.showConfirmDialog(this, panel, "Enter Wall Coordinates", JOptionPane.OK_CANCEL_OPTION);
+    //     int result = JOptionPane.showConfirmDialog(this, panel, "Enter Wall Coordinates", JOptionPane.OK_CANCEL_OPTION);
 
-        if (result == JOptionPane.OK_OPTION) {
-            try {
-                double x1 = Double.parseDouble(x1Field.getText());
-                double y1 = Double.parseDouble(y1Field.getText());
-                double x2 = Double.parseDouble(x2Field.getText());
-                double y2 = Double.parseDouble(y2Field.getText());
+    //     if (result == JOptionPane.OK_OPTION) {
+    //         try {
+    //             double x1 = Double.parseDouble(x1Field.getText());
+    //             double y1 = Double.parseDouble(y1Field.getText());
+    //             double x2 = Double.parseDouble(x2Field.getText());
+    //             double y2 = Double.parseDouble(y2Field.getText());
 
-                //Adding the walls with the specified coordinates
-                Wall w = new Wall(x1, y1, x2, y2);
-                walls.add(new Wall(x1, y1, x2, y2));
-                t.forEach((thread) -> thread.addWall(w));
+    //             //Adding the walls with the specified coordinates
+    //             Wall w = new Wall(x1, y1, x2, y2);
+    //             walls.add(new Wall(x1, y1, x2, y2));
+    //             t.forEach((thread) -> thread.addWall(w));
                 
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Invalid input! Please enter numeric values.");
-            }
-        }
-    }
+    //         } catch (NumberFormatException e) {
+    //             JOptionPane.showMessageDialog(this, "Invalid input! Please enter numeric values.");
+    //         }
+    //     }
+    // }
 
     /*
      * PAINT COMPONENT
@@ -326,9 +328,9 @@ public class ParticleSimulator extends JPanel {
             drawParticle(g2d, particle);
         }
 
-        for (Wall wall : walls) {
-            drawWall(g2d, wall);
-        }
+        // for (Wall wall : walls) {
+        //     drawWall(g2d, wall);
+        // }
     }
 
     /*
@@ -358,10 +360,11 @@ public class ParticleSimulator extends JPanel {
         g.fillOval(x, y, diameter, diameter);
     }
 
-    private void drawWall(Graphics2D g, Wall wall) {
-        g.setColor(WALL_COLOR);
-        g.drawLine((int) Math.round(wall.getX1()), (int) Math.round(wall.getY1()), (int) Math.round(wall.getX2()), (int) Math.round(wall.getY2()));
-    }
+    //wall begone for this version
+    // private void drawWall(Graphics2D g, Wall wall) {
+    //     g.setColor(WALL_COLOR);
+    //     g.drawLine((int) Math.round(wall.getX1()), (int) Math.round(wall.getY1()), (int) Math.round(wall.getX2()), (int) Math.round(wall.getY2()));
+    // }
 
     public static void main(String[] args) {
         List<CalculateThread> t = new ArrayList<>();

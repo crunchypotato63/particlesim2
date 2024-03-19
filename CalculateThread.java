@@ -8,14 +8,14 @@ public class CalculateThread extends Thread{
 
     public CalculateThread(){
         particles = new ArrayList<Particle>();
-        walls = new ArrayList<Wall>();
+        // walls = new ArrayList<Wall>();
     }
 
     
     //for every particle assigned to this thread, particle updates position.
     public void update(double deltaTime) {
         for (Particle particle : particles) {
-            particle.update(deltaTime, walls);
+            particle.update(deltaTime);
         }
     }
 
@@ -27,9 +27,9 @@ public class CalculateThread extends Thread{
 
 
     //adds a wall to the list of walls
-    public void addWall(Wall w){
-        walls.add(w);
-    }
+    // public void addWall(Wall w){
+    //     walls.add(w);
+    // }
 
 
     //adds a particle to the list of particles

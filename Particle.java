@@ -22,46 +22,46 @@ public class Particle {
         return y;
     }
 
-    public void update(double deltaTime, List<Wall> walls) {
+    public void update(double deltaTime) {
         //Move the particle
         double deltaX = velocity * Math.cos(Math.toRadians(angle)) * deltaTime;
         double deltaY = velocity * Math.sin(Math.toRadians(angle)) * deltaTime;
        
+    //wall begone for this version
+        // for(Wall wall: walls){
 
-        for(Wall wall: walls){
+        //     double x1 = wall.getX1();
+        //     double x2 = wall.getX2();
+        //     double y1 = wall.getY1();
+        //     double y2 = wall.getY2();
 
-            double x1 = wall.getX1();
-            double x2 = wall.getX2();
-            double y1 = wall.getY1();
-            double y2 = wall.getY2();
+        //     //wall is completely vertical
+        //     if(x1 == x2 && Math.abs(x1-x) <= 5 && (y1 <= y && y <= y2) || (y1 >= y && y >= y2)){
+        //         angle = 180-angle;
+        //         deltaX = velocity * Math.cos(Math.toRadians(angle)) * deltaTime;
+        //         deltaY = velocity * Math.sin(Math.toRadians(angle)) * deltaTime;
+        //     }
 
-            //wall is completely vertical
-            if(x1 == x2 && Math.abs(x1-x) <= 5 && (y1 <= y && y <= y2) || (y1 >= y && y >= y2)){
-                angle = 180-angle;
-                deltaX = velocity * Math.cos(Math.toRadians(angle)) * deltaTime;
-                deltaY = velocity * Math.sin(Math.toRadians(angle)) * deltaTime;
-            }
+        //     //wall is completely horizontal
+        //     else if(y1 == y2 && Math.abs(y1-y) <= 5 && (x1 <= x && x <= x2) || (x1 >= x && x >= x2)){
+        //         angle = 360-angle;
+        //         deltaX = velocity * Math.cos(Math.toRadians(angle)) * deltaTime;
+        //         deltaY = velocity * Math.sin(Math.toRadians(angle)) * deltaTime;
 
-            //wall is completely horizontal
-            else if(y1 == y2 && Math.abs(y1-y) <= 5 && (x1 <= x && x <= x2) || (x1 >= x && x >= x2)){
-                angle = 360-angle;
-                deltaX = velocity * Math.cos(Math.toRadians(angle)) * deltaTime;
-                deltaY = velocity * Math.sin(Math.toRadians(angle)) * deltaTime;
-
-            }
+        //     }
             
-            //wall is at an angle
-            else if(x1 != x2 && y1 != y2 && hasCollision(wall)){
-                double slope = (y2 - y1) / (x2 - x1);
-                double theta = Math.atan(slope);
+        //     //wall is at an angle
+        //     else if(x1 != x2 && y1 != y2 && hasCollision(wall)){
+        //         double slope = (y2 - y1) / (x2 - x1);
+        //         double theta = Math.atan(slope);
 
-                double incidence = angle - theta;
-                angle = 180+incidence;
-                deltaX = velocity * Math.cos(Math.toRadians(angle)) * deltaTime;
-                deltaY = velocity * Math.sin(Math.toRadians(angle)) * deltaTime;
+        //         double incidence = angle - theta;
+        //         angle = 180+incidence;
+        //         deltaX = velocity * Math.cos(Math.toRadians(angle)) * deltaTime;
+        //         deltaY = velocity * Math.sin(Math.toRadians(angle)) * deltaTime;
 
-            }
-        }
+        //     }
+        // }
 
         //Bounce the other way when boundary is hit
         if (x < 0 || x > ParticleSimulator.SCREEN_WIDTH) {
