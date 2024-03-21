@@ -23,6 +23,9 @@ public class ParticleSimulator extends JPanel {
     private List<Particle> particles = new ArrayList<>();
     // private List<Wall> walls = new ArrayList<>();
 
+    // Initialization of sprite
+    private Sprite sprite;
+
     //Variables needed to calculate FPS
     private int fps;
     private int frameCount;
@@ -32,6 +35,9 @@ public class ParticleSimulator extends JPanel {
     private List<CalculateThread> t;
 
     private int threadToAdd;
+
+    JButton addParticleButton;
+    JToggleButton switchToExplorer;
     
     public ParticleSimulator(List<CalculateThread> t) {
         threadToAdd = 0;
@@ -72,15 +78,65 @@ public class ParticleSimulator extends JPanel {
         this.add(fpsLabel, BorderLayout.NORTH);
 
         //Add Particle button
-        JButton addParticleButton = new JButton("Add Particle");
+        addParticleButton = new JButton("Add Particle");
         addParticleButton.addActionListener(e -> addParticles());
         this.add(addParticleButton, BorderLayout.SOUTH);
+
+       /* switchToExplorer = new JToggleButton("Explorer Mode");
+        switchToExplorer.addActionListener(e -> expModeToggle());
+        this.add(switchToExplorer, BorderLayout.SOUTH);*/
 
         //Add Wall button
         //wall begone for this version
         // JButton addWallButton = new JButton("Add Wall");
         // addWallButton.addActionListener(e -> addWall());
         // this.add(addWallButton, BorderLayout.SOUTH);
+
+        //Add Explorer mode button
+        JButton explorerModeButton = new JButton("Explorer Mode");
+        explorerModeButton.addActionListener(e -> expModeToggle());
+        this.add(explorerModeButton, BorderLayout.SOUTH);
+    }
+
+    private void expModeToggle(){
+        if(addParticleButton.isEnabled()){
+            addParticleButton.setEnabled(false);
+            //TODO
+            //choose where to spawn sprite
+            JPanel panel = new JPanel(new GridLayout(5, 2));
+            JTextField xCoord = new JTextField();
+            JTextField yCoord = new JTextField();
+
+            panel.add(new JLabel("X coordinate: "));
+            panel.add(xCoord);
+            panel.add(new JLabel("Y coordinate: "));
+            panel.add(yCoord);
+
+            int result = JOptionPane.showConfirmDialog(this, panel, "Enter Sprite Parameters", JOptionPane.OK_CANCEL_OPTION);
+
+            if (result == JOptionPane.OK_OPTION) {
+                try {
+                    //get x and y coordinates
+                    double xPos = Double.parseDouble(xCoord.getText());
+                    double yPos = Double.parseDouble(yCoord.getText());
+                    //spawn sprite here
+                    
+                    //set camera fov
+                    //sprite moving things here
+                    }
+                catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(this, "Invalid input! Only Numeric Values!");
+                    addParticleButton.setEnabled(true);
+                }
+            }
+        }
+        else{
+            //TODO
+            //sprite begone
+            //visibility back to fullscreen
+            addParticleButton.setEnabled(true);
+        }
+
     }
 
     /* 
@@ -324,13 +380,29 @@ public class ParticleSimulator extends JPanel {
         super.paintComponent(g);
 
         Graphics2D g2d = (Graphics2D) g;
-        for (Particle particle : particles) {
-            drawParticle(g2d, particle);
+
+        // Render particles within sprite's periphery if in explorer mode
+        //TODO
+        if(/* explorer mode */){
+            for (Particle particle : particles) {
+                //TODO
+                if(/* particle is in periphery */){
+                    drawParticle(g2d, particle);
+                }
+            }
+            drawSprite(g2d, sprite);
+        } else{
+            // Render all particles if in developer mode
+            for (Particle particle : particles) {
+                drawParticle(g2d, particle);
+            }
         }
 
         // for (Wall wall : walls) {
         //     drawWall(g2d, wall);
         // }
+
+        //drawSprite(g2d);
     }
 
     /*
@@ -358,6 +430,10 @@ public class ParticleSimulator extends JPanel {
         int y = (int) Math.round(particle.getY() - PARTICLE_RADIUS);
         int diameter = (int) Math.round(2 * PARTICLE_RADIUS);
         g.fillOval(x, y, diameter, diameter);
+    }
+
+    private void drawSprite(Graphics2D g, Sprite sprite){
+        //draw sprite here
     }
 
     //wall begone for this version
