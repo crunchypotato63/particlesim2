@@ -70,16 +70,20 @@ public class ParticleSimulator extends JPanel{
             }
 
             if (keyH.upPress){
-                updateSpritePosition(0, -SPEED); // Move sprite up
+                if (!((sprite.getY() - SPEED) <= 0))
+                    updateSpritePosition(0, -SPEED); // Move sprite up
             }
             if (keyH.dwnPress){
-                updateSpritePosition(0, SPEED); // Move sprite down
+                if (!((sprite.getY() + SPEED) >= SCREEN_HEIGHT))
+                    updateSpritePosition(0, SPEED); // Move sprite down
             }   
             if (keyH.lftPress){
-                updateSpritePosition(-SPEED, 0); // Move sprite left
+                if (!((sprite.getX() - SPEED) <= 0))
+                    updateSpritePosition(-SPEED, 0); // Move sprite left
             }
             if (keyH.rghtPress){
-                updateSpritePosition(SPEED, 0); // Move sprite right
+                if (!((sprite.getX() + SPEED) >= SCREEN_WIDTH))
+                    updateSpritePosition(SPEED, 0); // Move sprite right
             }
 
             repaint();
@@ -484,7 +488,6 @@ public class ParticleSimulator extends JPanel{
             }
             drawSprite(g2d, sprite);
         } else{
-            // Render all particles if in developer mode
             for (Particle particle : particles) {
                 drawParticle(g2d, particle);
             }
