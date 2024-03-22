@@ -1,14 +1,16 @@
 public class Sprite {
-    public double x;
-    public double y;
-    public final double screenX;
-    public final double screenY;
+    private double x;
+    private double y;
+    private final int screenX;
+    private final int screenY;
+    private final int size;
 
     public Sprite(double x, double y) {
         this.x = x;
         this.y = y;
-        this.screenX = 0;
-        this.screenY = 0;
+        this.size = 38;
+        this.screenX = size*16;
+        this.screenY = size*9;
     }
 
     public void updatePosition(double x, double y){
@@ -23,4 +25,17 @@ public class Sprite {
     public double getY(){
         return y;
     }
+
+    public int getScreenX(){
+        return screenX;
+    }
+
+    public int getScreenY(){
+        return screenY;
+    }
+
+    public int getSize(){
+        return size;
+    }
+
 }

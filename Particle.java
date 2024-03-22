@@ -81,6 +81,16 @@ public class Particle {
         y += deltaY;
     }
 
+    public void explorerMode(){
+        this.x *= 2;
+        this.y *= 2;
+    }
+
+    public void exitExplorer(){
+        this.x /= 2;
+        this.y /= 2;
+    }
+
         public boolean hasCollision(Wall wall) {
             double x1 = wall.getX1();
             double x2 = wall.getX2();

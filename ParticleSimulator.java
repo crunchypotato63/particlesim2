@@ -8,8 +8,8 @@ import java.util.List;
 public class ParticleSimulator extends JPanel{
     /*Initialization of immutable variables*/
     //Screen size: 1280 x 720
-    public static final int SCREEN_WIDTH = 1280;
-    public static final int SCREEN_HEIGHT = 720;
+    public static int SCREEN_WIDTH = 1280;
+    public static int SCREEN_HEIGHT = 720;
 
     //Particle size
     private double PARTICLE_RADIUS = 9.5;
@@ -70,21 +70,21 @@ public class ParticleSimulator extends JPanel{
             }
 
             if (keyH.upPress){
-                updateSpritePosition(0, SPEED); // Move sprite up
+                updateSpritePosition(0, -SPEED); // Move sprite up
                 System.out.println("Sprite X: " + sprite.getX() + " Sprite Y: " + sprite.getY());
             }
             if (keyH.dwnPress){
-                updateSpritePosition(0, -SPEED); // Move sprite down
+                updateSpritePosition(0, SPEED); // Move sprite down
                 
                 System.out.println("Sprite X: " + sprite.getX() + " Sprite Y: " + sprite.getY());
             }   
             if (keyH.lftPress){
-                updateSpritePosition(SPEED, 0); // Move sprite left
+                updateSpritePosition(-SPEED, 0); // Move sprite left
                 
                 System.out.println("Sprite X: " + sprite.getX() + " Sprite Y: " + sprite.getY());
             }
             if (keyH.rghtPress){
-                updateSpritePosition(-SPEED, 0); // Move sprite right
+                updateSpritePosition(SPEED, 0); // Move sprite right
                 
                 System.out.println("Sprite X: " + sprite.getX() + " Sprite Y: " + sprite.getY());
             }
@@ -129,7 +129,6 @@ public class ParticleSimulator extends JPanel{
     private void expModeToggle(){
         if(addParticleButton.isEnabled()){
             addParticleButton.setEnabled(false);
-            PARTICLE_RADIUS *= 2;
             //TODO
             //choose where to spawn sprite
             JPanel panel = new JPanel(new GridLayout(5, 2));
@@ -145,12 +144,19 @@ public class ParticleSimulator extends JPanel{
 
             if (result == JOptionPane.OK_OPTION) {
                 try {
+                    PARTICLE_RADIUS *= 2;
+                    SCREEN_HEIGHT *= 2;
+                    SCREEN_WIDTH *= 2;
                     //get x and y coordinates
                     double xPos = Double.parseDouble(xCoord.getText());
                     double yPos = Double.parseDouble(yCoord.getText());
                     //spawn sprite here
 
-                    sprite = new Sprite(xPos, yPos);
+                    for (Particle particle: particles){
+                        particle.explorerMode();
+                    }
+
+                    sprite = new Sprite(xPos*2, yPos*2);
                     explorerMode = true;
                     addKeyboardListener();
                     
@@ -161,6 +167,8 @@ public class ParticleSimulator extends JPanel{
                     JOptionPane.showMessageDialog(this, "Invalid input! Only Numeric Values!");
                     addParticleButton.setEnabled(true);
                 }
+            } else {
+                addParticleButton.setEnabled(true);
             }
         }
         else{
@@ -168,6 +176,11 @@ public class ParticleSimulator extends JPanel{
             //sprite begone
             //visibility back to fullscreen
             PARTICLE_RADIUS /= 2;
+            SCREEN_HEIGHT /= 2;
+            SCREEN_WIDTH /= 2;
+            for (Particle particle: particles){
+                particle.exitExplorer();
+            }
             explorerMode = false;
             sprite = null;
             repaint();
@@ -473,7 +486,7 @@ public class ParticleSimulator extends JPanel{
             for (Particle particle : particles) {
                 //TODO
                 if(withinCamera(particle, sprite)){
-                    drawParticle(g2d, particle);
+                    drawParticleExpMode(g2d, particle, sprite);
                 }
             }
             drawSprite(g2d, sprite);
@@ -492,8 +505,8 @@ public class ParticleSimulator extends JPanel{
     }
 
     private boolean withinCamera(Particle particle, Sprite sprite){
-        if(sprite.getX() - 304 <= particle.getX() && particle.getX() <= sprite.getX() + 304){
-            if(sprite.getY() - 171 <= particle.getY() && particle.getY() <= sprite.getY() + 171)
+        if(sprite.getX() - 608 <= particle.getX() && particle.getX() <= sprite.getX() + 608){
+            if(sprite.getY() - 342 <= particle.getY() && particle.getY() <= sprite.getY() + 342)
                 return true;
             else
                 return false;
@@ -521,7 +534,7 @@ public class ParticleSimulator extends JPanel{
      * These two functions are responsible for drawing the particles and the walls on the program.
      */
 
-    private void drawParticle(Graphics2D g, Particle particle) {
+     private void drawParticle(Graphics2D g, Particle particle) {
         g.setColor(PARTICLE_COLOR);
         int x = (int) Math.round(particle.getX() - PARTICLE_RADIUS);
         int y = (int) Math.round(particle.getY() - PARTICLE_RADIUS);
@@ -529,13 +542,22 @@ public class ParticleSimulator extends JPanel{
         g.fillOval(x, y, diameter, diameter);
     }
 
+    private void drawParticleExpMode(Graphics2D g, Particle particle, Sprite sprite) {
+        g.setColor(PARTICLE_COLOR);
+        int x = (int) Math.round(particle.getX() - PARTICLE_RADIUS);
+        int y = (int) Math.round(particle.getY() - PARTICLE_RADIUS);
+        int screenX = x - (int)sprite.getX() + sprite.getScreenX();
+        int screenY = y - (int)sprite.getY() + sprite.getScreenY();
+        int diameter = (int) Math.round(2 * PARTICLE_RADIUS);
+        g.fillOval(screenX, screenY, diameter, diameter);
+    }
+
     private void drawSprite(Graphics2D g, Sprite sprite){
         //draw sprite here
-        int spriteSize = 38;
         // Calculate sprite position on the canvas
         // Set color and draw the sprite
         g.setColor(Color.BLUE); // You can change the color as desired
-        g.fillRect(spriteSize*16, spriteSize*9, spriteSize, spriteSize);
+        g.fillRect(sprite.getScreenX(), sprite.getScreenY(), sprite.getSize(), sprite.getSize());
     }
 
     //wall begone for this version
