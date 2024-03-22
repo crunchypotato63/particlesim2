@@ -5,7 +5,7 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ParticleSimulator extends JPanel implements KeyListener{
+public class ParticleSimulator extends JPanel{
     /*Initialization of immutable variables*/
     //Screen size: 1280 x 720
     public static final int SCREEN_WIDTH = 1280;
@@ -21,12 +21,15 @@ public class ParticleSimulator extends JPanel implements KeyListener{
     //Updates FPS every 0.5 seconds
     private static final double FPS_UPDATE_INTERVAL = 0.5;
 
+    private static final int SPEED = 1;
+
     //Initialization of Particles and Walls
     private List<Particle> particles = new ArrayList<>();
     // private List<Wall> walls = new ArrayList<>();
 
     // Initialization of sprite
     private Sprite sprite;
+    private keyHandler keyH = new keyHandler();
 
     private boolean explorerMode = false;
 
@@ -56,7 +59,7 @@ public class ParticleSimulator extends JPanel implements KeyListener{
         //Update loop
         new Timer(1000 / 120, e -> {
             long now = System.nanoTime();
-            double deltaTime = (now - lastTime) / 1_000_000_000.0;
+            double deltaTime = (now - lastTime) / 1000000000.0;
             lastTime = now;
 
             t.forEach((thread) -> thread.update(deltaTime));
@@ -65,6 +68,20 @@ public class ParticleSimulator extends JPanel implements KeyListener{
                 List<Particle> part = t.get(i).getParticles();
                 particles.addAll(part);
             }
+
+            if (keyH.upPress){
+                updateSpritePosition(0, -SPEED); // Move sprite up
+            }
+            if (keyH.dwnPress){
+                updateSpritePosition(0, SPEED); // Move sprite down
+            }   
+            if (keyH.lftPress){
+                updateSpritePosition(-SPEED, 0); // Move sprite left
+            }
+            if (keyH.rghtPress){
+                updateSpritePosition(SPEED, 0); // Move sprite right
+            }
+
             repaint();
             frameCount++;
         }).start();
@@ -147,7 +164,7 @@ public class ParticleSimulator extends JPanel implements KeyListener{
             sprite = null;
             repaint();
             addParticleButton.setEnabled(true);
-            this.removeKeyListener(this);
+            this.removeKeyListener(keyH);
         }
 
     }
@@ -167,37 +184,37 @@ public class ParticleSimulator extends JPanel implements KeyListener{
     private void addKeyboardListener() {
         this.setFocusable(true);
         this.requestFocus();
-        this.addKeyListener(this);
+        this.addKeyListener(keyH);
     }
 
-    @Override
-    public void keyPressed(KeyEvent e) {
-        int keyCode = e.getKeyCode();
-        switch (keyCode) {
-            case KeyEvent.VK_UP:
-                updateSpritePosition(0, -1); // Move sprite up
-                break;
-            case KeyEvent.VK_DOWN:
-                updateSpritePosition(0, 1); // Move sprite down
-                break;
-            case KeyEvent.VK_LEFT:
-                updateSpritePosition(-1, 0); // Move sprite left
-                break;
-            case KeyEvent.VK_RIGHT:
-                updateSpritePosition(1, 0); // Move sprite right
-                break;
-        }
-    }
+    // @Override
+    // public void keyPressed(KeyEvent e) {
+    //     int keyCode = e.getKeyCode();
 
-    @Override
-    public void keyReleased(KeyEvent e) {
-        // Not used in this implementation
-    }
+    //     if (keyCode == KeyEvent.VK_UP){
+    //         updateSpritePosition(0, -SPEED); // Move sprite up
+    //     }
+        
+    //     if (keyCode == KeyEvent.VK_DOWN){
+    //         updateSpritePosition(0, SPEED); // Move sprite down
+    //     }
+    //     if (keyCode == KeyEvent.VK_LEFT){
+    //         updateSpritePosition(-SPEED, 0); // Move sprite left
+    //     }
+    //     if (keyCode == KeyEvent.VK_RIGHT){
+    //         updateSpritePosition(SPEED, 0); // Move sprite right
+    //     }
+    // }
 
-    @Override
-    public void keyTyped(KeyEvent e) {
-        // Not used in this implementation
-    }
+    // @Override
+    // public void keyReleased(KeyEvent e) {
+    //     // Not used in this implementation
+    // }
+
+    // @Override
+    // public void keyTyped(KeyEvent e) {
+    //     // Not used in this implementation
+    // }
 
 
     /* 
@@ -495,7 +512,7 @@ public class ParticleSimulator extends JPanel implements KeyListener{
 
     private void drawSprite(Graphics2D g, Sprite sprite){
         //draw sprite here
-        int spriteSize = 20;
+        int spriteSize = 38;
         // Calculate sprite position on the canvas
         int spriteX = (int) Math.round(sprite.getX() - spriteSize / 2);
         int spriteY = (int) Math.round(sprite.getY() - spriteSize / 2);
