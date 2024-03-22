@@ -12,7 +12,7 @@ public class ParticleSimulator extends JPanel{
     public static final int SCREEN_HEIGHT = 720;
 
     //Particle size
-    private static final double PARTICLE_RADIUS = 10;
+    private double PARTICLE_RADIUS = 9.5;
 
     //Particle and Wall colors
     private static final Color PARTICLE_COLOR = Color.RED;
@@ -71,15 +71,22 @@ public class ParticleSimulator extends JPanel{
 
             if (keyH.upPress){
                 updateSpritePosition(0, -SPEED); // Move sprite up
+                System.out.println("Sprite X: " + sprite.getX() + " Sprite Y: " + sprite.getY());
             }
             if (keyH.dwnPress){
                 updateSpritePosition(0, SPEED); // Move sprite down
+                
+                System.out.println("Sprite X: " + sprite.getX() + " Sprite Y: " + sprite.getY());
             }   
             if (keyH.lftPress){
                 updateSpritePosition(-SPEED, 0); // Move sprite left
+                
+                System.out.println("Sprite X: " + sprite.getX() + " Sprite Y: " + sprite.getY());
             }
             if (keyH.rghtPress){
                 updateSpritePosition(SPEED, 0); // Move sprite right
+                
+                System.out.println("Sprite X: " + sprite.getX() + " Sprite Y: " + sprite.getY());
             }
 
             repaint();
@@ -122,6 +129,7 @@ public class ParticleSimulator extends JPanel{
     private void expModeToggle(){
         if(addParticleButton.isEnabled()){
             addParticleButton.setEnabled(false);
+            PARTICLE_RADIUS *= 2;
             //TODO
             //choose where to spawn sprite
             JPanel panel = new JPanel(new GridLayout(5, 2));
@@ -144,7 +152,6 @@ public class ParticleSimulator extends JPanel{
 
                     sprite = new Sprite(xPos, yPos);
                     explorerMode = true;
-                    repaint();
                     addKeyboardListener();
                     
                     //set camera fov
@@ -160,6 +167,7 @@ public class ParticleSimulator extends JPanel{
             //TODO
             //sprite begone
             //visibility back to fullscreen
+            PARTICLE_RADIUS /= 2;
             explorerMode = false;
             sprite = null;
             repaint();
@@ -514,11 +522,9 @@ public class ParticleSimulator extends JPanel{
         //draw sprite here
         int spriteSize = 38;
         // Calculate sprite position on the canvas
-        int spriteX = (int) Math.round(sprite.getX() - spriteSize / 2);
-        int spriteY = (int) Math.round(sprite.getY() - spriteSize / 2);
         // Set color and draw the sprite
         g.setColor(Color.BLUE); // You can change the color as desired
-        g.fillRect(spriteX, spriteY, spriteSize, spriteSize);
+        g.fillRect(spriteSize*16, spriteSize*9, spriteSize, spriteSize);
     }
 
     //wall begone for this version
