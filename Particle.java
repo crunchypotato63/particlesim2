@@ -84,11 +84,13 @@ public class Particle {
     public void explorerMode(){
         this.x *= 2;
         this.y *= 2;
+        this.velocity *= 2;
     }
 
     public void exitExplorer(){
         this.x /= 2;
         this.y /= 2;
+        this.velocity /=2;
     }
 
         public boolean hasCollision(Wall wall) {
