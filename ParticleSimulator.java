@@ -1,9 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ParticleSimulator extends JPanel {
+public class ParticleSimulator extends JPanel implements KeyListener{
     /*Initialization of immutable variables*/
     //Screen size: 1280 x 720
     public static final int SCREEN_WIDTH = 1280;
@@ -26,7 +28,7 @@ public class ParticleSimulator extends JPanel {
     // Initialization of sprite
     private Sprite sprite;
 
-    private boolean explorerMode;
+    private boolean explorerMode = false;
 
     //Variables needed to calculate FPS
     private int fps;
@@ -125,6 +127,8 @@ public class ParticleSimulator extends JPanel {
 
                     sprite = new Sprite(xPos, yPos);
                     explorerMode = true;
+                    repaint();
+                    addKeyboardListener();
                     
                     //set camera fov
                     //sprite moving things here
@@ -141,10 +145,60 @@ public class ParticleSimulator extends JPanel {
             //visibility back to fullscreen
             explorerMode = false;
             sprite = null;
+            repaint();
             addParticleButton.setEnabled(true);
+            this.removeKeyListener(this);
         }
 
     }
+
+    private void updateSpritePosition(int dx, int dy) {
+        if (sprite != null) {
+            // Update the sprite's position based on the change in coordinates
+            double newX = sprite.getX() + dx;
+            double newY = sprite.getY() + dy;
+            sprite.updatePosition(newX, newY);
+            
+            // Repaint the panel to show the updated sprite position
+            repaint();
+        }
+    }
+
+    private void addKeyboardListener() {
+        this.setFocusable(true);
+        this.requestFocus();
+        this.addKeyListener(this);
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int keyCode = e.getKeyCode();
+        switch (keyCode) {
+            case KeyEvent.VK_UP:
+                updateSpritePosition(0, -1); // Move sprite up
+                break;
+            case KeyEvent.VK_DOWN:
+                updateSpritePosition(0, 1); // Move sprite down
+                break;
+            case KeyEvent.VK_LEFT:
+                updateSpritePosition(-1, 0); // Move sprite left
+                break;
+            case KeyEvent.VK_RIGHT:
+                updateSpritePosition(1, 0); // Move sprite right
+                break;
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        // Not used in this implementation
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        // Not used in this implementation
+    }
+
 
     /* 
      * ADD PARTICLES
