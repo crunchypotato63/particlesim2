@@ -1,6 +1,3 @@
-import java.util.List;
-
-
 public class Particle {
     private double x;
     private double y;

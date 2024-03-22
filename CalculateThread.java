@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.*;
 
 public class CalculateThread extends Thread{
     public List<Particle> particles;
