@@ -26,6 +26,8 @@ public class ParticleSimulator extends JPanel {
     // Initialization of sprite
     private Sprite sprite;
 
+    private boolean explorerMode;
+
     //Variables needed to calculate FPS
     private int fps;
     private int frameCount;
@@ -120,6 +122,9 @@ public class ParticleSimulator extends JPanel {
                     double xPos = Double.parseDouble(xCoord.getText());
                     double yPos = Double.parseDouble(yCoord.getText());
                     //spawn sprite here
+
+                    sprite = new Sprite(xPos, yPos);
+                    explorerMode = true;
                     
                     //set camera fov
                     //sprite moving things here
@@ -134,6 +139,8 @@ public class ParticleSimulator extends JPanel {
             //TODO
             //sprite begone
             //visibility back to fullscreen
+            explorerMode = false;
+            sprite = null;
             addParticleButton.setEnabled(true);
         }
 
@@ -383,13 +390,13 @@ public class ParticleSimulator extends JPanel {
 
         // Render particles within sprite's periphery if in explorer mode
         //TODO
-        if(/* explorer mode */){
-            for (Particle particle : particles) {
-                //TODO
-                if(/* particle is in periphery */){
-                    drawParticle(g2d, particle);
-                }
-            }
+        if(explorerMode){
+            // for (Particle particle : particles) {
+            //     //TODO
+            //     if(/* particle is in periphery */){
+            //         drawParticle(g2d, particle);
+            //     }
+            // }
             drawSprite(g2d, sprite);
         } else{
             // Render all particles if in developer mode
@@ -434,6 +441,13 @@ public class ParticleSimulator extends JPanel {
 
     private void drawSprite(Graphics2D g, Sprite sprite){
         //draw sprite here
+        int spriteSize = 20;
+        // Calculate sprite position on the canvas
+        int spriteX = (int) Math.round(sprite.getX() - spriteSize / 2);
+        int spriteY = (int) Math.round(sprite.getY() - spriteSize / 2);
+        // Set color and draw the sprite
+        g.setColor(Color.BLUE); // You can change the color as desired
+        g.fillRect(spriteX, spriteY, spriteSize, spriteSize);
     }
 
     //wall begone for this version
