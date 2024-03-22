@@ -71,22 +71,15 @@ public class ParticleSimulator extends JPanel{
 
             if (keyH.upPress){
                 updateSpritePosition(0, -SPEED); // Move sprite up
-                System.out.println("Sprite X: " + sprite.getX() + " Sprite Y: " + sprite.getY());
             }
             if (keyH.dwnPress){
                 updateSpritePosition(0, SPEED); // Move sprite down
-                
-                System.out.println("Sprite X: " + sprite.getX() + " Sprite Y: " + sprite.getY());
             }   
             if (keyH.lftPress){
                 updateSpritePosition(-SPEED, 0); // Move sprite left
-                
-                System.out.println("Sprite X: " + sprite.getX() + " Sprite Y: " + sprite.getY());
             }
             if (keyH.rghtPress){
                 updateSpritePosition(SPEED, 0); // Move sprite right
-                
-                System.out.println("Sprite X: " + sprite.getX() + " Sprite Y: " + sprite.getY());
             }
 
             repaint();
