@@ -21,7 +21,7 @@ public class ParticleSimulator extends JPanel{
     //Updates FPS every 0.5 seconds
     private static final double FPS_UPDATE_INTERVAL = 0.5;
 
-    private static final int SPEED = 1;
+    private static final int SPEED = 10;
 
     //Initialization of Particles and Walls
     private List<Particle> particles = new ArrayList<>();
@@ -70,21 +70,21 @@ public class ParticleSimulator extends JPanel{
             }
 
             if (keyH.upPress){
-                updateSpritePosition(0, -SPEED); // Move sprite up
+                updateSpritePosition(0, SPEED); // Move sprite up
                 System.out.println("Sprite X: " + sprite.getX() + " Sprite Y: " + sprite.getY());
             }
             if (keyH.dwnPress){
-                updateSpritePosition(0, SPEED); // Move sprite down
+                updateSpritePosition(0, -SPEED); // Move sprite down
                 
                 System.out.println("Sprite X: " + sprite.getX() + " Sprite Y: " + sprite.getY());
             }   
             if (keyH.lftPress){
-                updateSpritePosition(-SPEED, 0); // Move sprite left
+                updateSpritePosition(SPEED, 0); // Move sprite left
                 
                 System.out.println("Sprite X: " + sprite.getX() + " Sprite Y: " + sprite.getY());
             }
             if (keyH.rghtPress){
-                updateSpritePosition(SPEED, 0); // Move sprite right
+                updateSpritePosition(-SPEED, 0); // Move sprite right
                 
                 System.out.println("Sprite X: " + sprite.getX() + " Sprite Y: " + sprite.getY());
             }
@@ -470,12 +470,12 @@ public class ParticleSimulator extends JPanel{
         // Render particles within sprite's periphery if in explorer mode
         //TODO
         if(explorerMode){
-            // for (Particle particle : particles) {
-            //     //TODO
-            //     if(/* particle is in periphery */){
-            //         drawParticle(g2d, particle);
-            //     }
-            // }
+            for (Particle particle : particles) {
+                //TODO
+                if(withinCamera(particle, sprite)){
+                    drawParticle(g2d, particle);
+                }
+            }
             drawSprite(g2d, sprite);
         } else{
             // Render all particles if in developer mode
@@ -489,6 +489,17 @@ public class ParticleSimulator extends JPanel{
         // }
 
         //drawSprite(g2d);
+    }
+
+    private boolean withinCamera(Particle particle, Sprite sprite){
+        if(sprite.getX() - 304 <= particle.getX() && particle.getX() <= sprite.getX() + 304){
+            if(sprite.getY() - 171 <= particle.getY() && particle.getY() <= sprite.getY() + 171)
+                return true;
+            else
+                return false;
+        }
+        else
+            return false;
     }
 
     /*
